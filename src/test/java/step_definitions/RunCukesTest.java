@@ -3,6 +3,7 @@ package step_definitions;
 import com.cucumber.listener.Reporter;
 import com.github.mkolisnyk.cucumber.runner.ExtendedCucumber;
 import com.github.mkolisnyk.cucumber.runner.ExtendedCucumberOptions;
+//import com.intuit.karate.junit4.Karate;
 import helpers.ConfigReaderClass;
 import org.junit.AfterClass;
 import org.junit.runner.RunWith;
@@ -28,6 +29,7 @@ import java.io.File;
 		includeCoverageTags = {"@Login" },
 		outputFolder = "target/")*/
 @RunWith(ExtendedCucumber.class)
+//@RunWith(Karate.class)
 @ExtendedCucumberOptions(jsonReport = "target/cucumber.json",
 		retryCount = 0,
 		detailedReport = true,
@@ -38,7 +40,7 @@ import java.io.File;
 		usageReport = true,
 		toPDF = true,
 		//excludeCoverageTags = {"@flaky" },
-		includeCoverageTags = {"@Login" },
+		includeCoverageTags = {"@PruFlexiClientCreation,@PruFlexiGenerateBI,@IntegrationCase1" },
 		outputFolder = "target/")
 
 @CucumberOptions(
@@ -49,7 +51,11 @@ import java.io.File;
 		//"html:target/cucumber-html-report", "json:target/cucumber.json", "pretty:target/cucumber-pretty.txt",   "usage:target/cucumber-usage.json", "junit:target/cucumber-results.xml"
 		plugin = {"html:target/cucumber-html-report", "json:target/cucumber.json", "pretty:target/cucumber-pretty.txt","usage:target/cucumber-usage.json", "junit:target/cucumber-results.xml","com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-ExtendedReports/report.html"},
 		//plugin = {"html:target/cucumber-html-report", "json:target/cucumber.json", "pretty:target/cucumber-pretty.txt",   "usage:target/cucumber-usage.json", "junit:target/cucumber-results.xml","com.cucumber.listener.ExtentCucumberFormatter:target/cucumber-ExtendedReports/report.html"},
-		tags = {"@dummy"},
+		//tags = {"@PruFlexiClientCreation,@PruFlexiGenerateBI,@IntegrationCase1"},
+		tags = {"@PruFlexiClientCreation,@PruFlexiGenerateBI,@IntegrationCase1"},
+		//tags = {"Sample"},
+		//dryRun = true,
+		//strict = false,
 		monochrome = true
 		)
 		//tags = {"@initial"})

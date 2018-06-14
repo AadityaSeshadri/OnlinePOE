@@ -1,13 +1,18 @@
 package pageobjects;
 //import helpers.Log;
 
+import gherkin.lexer.Th;
 import helpers.Log;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import step_definitions.Hooks;
 import step_definitions.Reusable_Functions;
 
@@ -16,7 +21,17 @@ import java.io.IOException;
 //public class LifeAssured extends BaseClass{
 
 public class BenefitDetails {
-WebDriver driver = Hooks.driver;
+    public WebDriver driver;
+    public WebDriverWait wait;
+
+
+    public BenefitDetails()
+    {
+        driver = Hooks.driver;
+        wait = Hooks.wait;
+        PageFactory.initElements(driver,this);
+
+    }
 
     @FindBy(how=How.ID, using="BenefitDetails_PaymentMode")
     public static WebElement Drp_BenefitDetails_PaymentMode;
@@ -152,6 +167,12 @@ WebDriver driver = Hooks.driver;
 
     @FindBy(how=How.ID, using="BenefitDetails_Next")
     public static WebElement Btn_BenefitDetails_Next;
+
+    //***********Temp
+
+    @FindBy(how=How.XPATH, using="//div[contains(text(),'Payment Mode')]")
+    public static WebElement Drp_PaymentMode;
+
 
 
     public static void PruFlexiCash_ValidateOnPageLoad()
@@ -406,7 +427,127 @@ WebDriver driver = Hooks.driver;
 //****************Place required to change when xpath or property changes
 
 
+    public void Validate_PlanDetails() {
 
+         Assert.assertTrue(driver.findElement(By.xpath("//input[@value='Crisis Cover Extra']")).getAttribute("value").contains("Crisis Cover Extra"));
+        Assert.assertTrue(driver.findElement(By.xpath("//input[@value='Accident Assist']")).getAttribute("value").contains("Accident Assist"));
+        Assert.assertTrue(driver.findElement(By.xpath("//input[@value='Recovery Aid Benefit']")).getAttribute("value").contains("Recovery Aid Benefit"));
+         Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[2]/span")).getText().trim().contains("Min: 10000 Max: 99999500"));
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/span")).getText().trim().contains("Min: 1112"));
+
+
+    }
+
+    public void ValidateMinMaxforTerm() throws InterruptedException {
+
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Payment Mode')]//parent::div/input")).sendKeys("Half-Yearly");
+        String DrpDown_Xpath = "//div[contains(text(),'Payment Mode')]//following-sibling::div[3]";
+        String Element_Xpath = "//div[contains(text(),'Half-Yearly')]";
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(DrpDown_Xpath)));
+        driver.findElement(By.xpath(Element_Xpath)).click();
+        Thread.sleep(2000);
+        //System.out.println("Contains Text" + driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/span")).getText().trim());
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/span")).getText().trim().contains("561.56"));
+
+
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Payment Mode')]//parent::div/input")).sendKeys("Quarterly");
+        String DrpDown_Xpath1 = "//div[contains(text(),'Payment Mode')]//following-sibling::div[3]";
+        String Element_Xpath1 = "//div[contains(text(),'Quarterly')]";
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(DrpDown_Xpath1)));
+        driver.findElement(By.xpath(Element_Xpath1)).click();
+        Thread.sleep(2000);
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/span")).getText().trim().contains("283.56"));
+
+
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Payment Mode')]//parent::div/input")).sendKeys("Monthly");
+        String DrpDown_Xpath2 = "//div[contains(text(),'Payment Mode')]//following-sibling::div[3]";
+        String Element_Xpath2 = "//div[contains(text(),'Monthly')]";
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(DrpDown_Xpath2)));
+        driver.findElement(By.xpath(Element_Xpath2)).click();
+        Thread.sleep(2000);
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/span")).getText().trim().contains("94.52"));
+
+
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[1]/div[1]/div[2]")).click();
+        driver.findElement(By.xpath("//div[contains(text(),'Payment Mode')]//parent::div/input")).sendKeys("Half-Yearly");
+        String DrpDown_Xpath3 = "//div[contains(text(),'Payment Mode')]//following-sibling::div[3]";
+        String Element_Xpath3 = "//div[contains(text(),'Half-Yearly')]";
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(DrpDown_Xpath3)));
+        driver.findElement(By.xpath(Element_Xpath3)).click();
+        Thread.sleep(2000);
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/span")).getText().trim().contains("561.56"));
+
+
+    }
+
+
+    public void ValidatePremiumChangeinMainPlabAffectSupp() throws InterruptedException {
+
+        WebElement Txt_MainPlanSummassured = driver.findElements(By.xpath("//div[contains(text(),'SUM ASSURED *')]")).get(0);
+        Reusable_Functions.EnterTextBox(driver,Txt_MainPlanSummassured,"10000");
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[3]/div[3]/div[2]/input")).click();
+
+        Thread.sleep(2000);
+        System.out.println("Value" + driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[3]/div[3]/div[2]/input")).getAttribute("value").trim());
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[3]/div[3]/div[2]/input")).getAttribute("value").trim().contains("10000"));
+        //System.out.println("Finished");
+    }
+
+    public void SummAssuredAffectingModelPremium(String sa, String mp) throws InterruptedException {
+        WebElement Txt_MainPlanSummassured = driver.findElements(By.xpath("//div[contains(text(),'SUM ASSURED *')]//parent::div/child::input")).get(0);
+        Txt_MainPlanSummassured.clear();
+        Reusable_Functions.EnterTextBox(driver,Txt_MainPlanSummassured,sa);
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/input")).click();
+        Thread.sleep(2000);
+        System.out.println("Value MP"+ driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/input")).getAttribute("value"));
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/input")).getAttribute("value").contains(mp));
+
+
+    }
+
+    public void MPAffectsSA(String sa, String mp) throws InterruptedException {
+        WebElement Txt_MainPlanMP = driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[3]/input"));
+        Txt_MainPlanMP.clear();
+        Reusable_Functions.EnterTextBox(driver,Txt_MainPlanMP,sa);
+
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[2]/input")).click();
+        Thread.sleep(2000);
+        Assert.assertTrue(driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[2]/div[3]/div[2]/input")).getAttribute("value").trim().contains(mp));
+
+
+    }
+
+    public void DeleteAccAssist_RecoveryAidBenefit() throws InterruptedException {
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[5]/div[1]/button")).click();
+        Thread.sleep(2000);
+       // Assert.assertTrue(!is);
+        //Assert.assertTrue(driver.findElement(By.xpath("//input[@value='Recovery Aid Benefit']")).getSize().equals(0));
+        System.out.println("Finished");
+    }
+
+/*
+    public void AddCrisisCoverThree() {
+        WebElement Plan_Name = driver.findElements(By.xpath("//div[contains(text(),'PLAN NAME *')]")).get(3);
+
+    }
+*/
+
+
+    public void DeleteCrissCoverExtra() {
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[4]/div[1]/button")).click();
+        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[4]/div[1]/button")));
+
+    }
+
+    public void BenefitDetailsNext() {
+        driver.findElement(By.xpath("//*[@id=\"app\"]/div/div[3]/div[2]/div/div/div[2]/div/div[2]/div[3]/div/div[1]/input")).click();
+    }
+
+    public void AddCrisisCoverThree() {
+    }
 }
 
 

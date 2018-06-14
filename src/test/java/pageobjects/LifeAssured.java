@@ -11,6 +11,8 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import step_definitions.Hooks;
 import step_definitions.Reusable_Functions;
 
@@ -20,7 +22,17 @@ import java.io.IOException;
 //public class LifeAssured extends BaseClass{
 
 	public class LifeAssured {
-	WebDriver driver = Hooks.driver;
+		public WebDriver driver;
+		public WebDriverWait wait;
+
+
+		public LifeAssured()
+		{
+			driver = Hooks.driver;
+			wait = Hooks.wait;
+			PageFactory.initElements(driver,this);
+
+		}
 
 	@FindBy(how=How.ID, using="LifeAssured_MainLifeName")
 	public static WebElement Lbl_LifeAssuredProfile_MainLifeAssured_Name;
@@ -28,7 +40,7 @@ import java.io.IOException;
 	@FindBy(how=How.ID, using="LifeAssured_MainLifeAge")
 	public static WebElement Lbl_LifeAssuredProfile_MainLifeAssured_Age;
 
-	@FindBy(how=How.ID, using="LifeAssured_Next")
+	@FindBy(how=How.XPATH, using="//input[@id='LifeAssured_Next']")
 	public static WebElement Btn_LifeAssuredProfile_Next;
 	
 	@FindBy(how=How.XPATH, using="//input[@id='pass']")
@@ -65,16 +77,19 @@ import java.io.IOException;
 		signin_button.click();
 	}*/
 
-		public static void ValidateLifeAssured_Name_Age(String arg1, String arg2)
+		public  void ValidateLifeAssured_Name_Age(String arg1, String arg2)
 		{
 			Assert.assertEquals(Lbl_LifeAssuredProfile_MainLifeAssured_Name.getText(),arg1); //Validating Name
 			Assert.assertEquals(Lbl_LifeAssuredProfile_MainLifeAssured_Age.getText(),arg2); //Validating Age
 		}
 
-		public static void LifeAssuredClickNext()
+		public void LifeAssuredClickNext()
 		{
+			wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//input[@value='NEXT']")));
 			Btn_LifeAssuredProfile_Next.click();
 		}
+
+
 	}
 		
 

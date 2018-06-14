@@ -11,6 +11,7 @@ import com.aventstack.extentreports.MediaEntityBuilder;
 import com.cucumber.listener.Reporter;
 import com.gargoylesoftware.htmlunit.BrowserVersion;
 import com.github.mkolisnyk.cucumber.reporting.CucumberDetailedResults;
+import com.github.mkolisnyk.cucumber.runner.ExtendedCucumber;
 import gherkin.formatter.model.Feature;
 import helpers.Log;
 import org.apache.commons.io.FileUtils;
@@ -28,6 +29,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
@@ -35,12 +37,14 @@ import javax.imageio.ImageIO;
 
 public class Hooks{
     public static WebDriver driver;
+    public static WebDriverWait wait;
     public static Scenario scenario;
     public static String OS_Name;
     public static String Base_URL;
+    public static String Runner_Name;
 
 
-    @Before("@Login")
+    //@Before("@Login")
     public void first (Scenario scenario)
     {
         System.out.println("****************************************************************************");
@@ -51,7 +55,7 @@ public class Hooks{
         }
 
     }
-    @After("@Login")
+    //@After("@Login")
     public void after(Scenario scenario)
     {
         Collections.emptyMap();
@@ -64,14 +68,17 @@ public class Hooks{
     }
 
 
-    @Before
+    @Before("@IntegrationCase1")
     public void openBrowser(Scenario scenario) throws IOException {
         Hooks.scenario = scenario;
+        //Hooks.Runner_Name  = "ExtendedCucumber";
        /* EnvironmentValue  = System.getProperty("Dev");
         System.out.println("*************EnvironmentValue***************" + EnvironmentValue );*/
         //java.util.Properties properties = new Properties();
         Base_URL = System.getProperty("URL");
+        //Runner_Name = System.getProperty("Runner")+".class";
         System.out.println("****************EnvironmentValue***************"+ Base_URL);
+       // System.out.println("****************EnvironmentValue***************"+ Runner_Name);
         //Reusable_Functions.Set_PreRequisites(scenario);
 
         //Phantom Driver Headless Execution
@@ -86,21 +93,22 @@ public class Hooks{
 
 
   //Chrome Headless without ternanry operator
-     /* System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\chromedriver.exe");
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("headless");
-        options.addArguments("window-size=1200x600");
-        driver = new ChromeDriver(options);
-        OS_Name =  System.getProperty("os.name");*/
+   System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\chromedriver.exe");
+        //ChromeOptions options = new ChromeOptions();
+       // options.addArguments("headless");
+        //options.addArguments("window-size=1200x600");
+      driver = new ChromeDriver();
+        //OS_Name =  System.getProperty("os.name");
 
 
         //Chrome Headless with ternanry operator
-      /*  OS_Name =  System.getProperty("os.name");
+
+       /* OS_Name =  System.getProperty("os.name");
         OS_Name = OS_Name.contains("Windows")? System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\chromedriver.exe"):System.setProperty("webdriver.chrome.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\chromedriver_Linux");
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("headless");
+       */ //ChromeOptions options = new ChromeOptions();
+       // options.addArguments("headless");
         // options.addArguments("window-size=1200x600");
-        driver = new ChromeDriver(options);*/
+        //driver = new ChromeDriver(options);
 
 
        //*****************************Internet Explorer Edge Instantiation************************************
@@ -110,21 +118,24 @@ public class Hooks{
 
 
         //*****************************Internet Explorer 11 Instantiation************************************
-        System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\IEDriverServer.exe");
+       /* System.setProperty("webdriver.ie.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\IEDriverServer.exe");
         DesiredCapabilities caps = DesiredCapabilities.internetExplorer();
         caps.setCapability("ignoreZoomSetting", true);
         caps.setCapability("requireWindowFocus", true);
-        driver = new InternetExplorerDriver(caps);
-
-       /* System.setProperty("webdriver.gecko.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\geckodriver.exe");
+        caps.setCapability("nativeEvents", false);
+        //caps.setCapability("ENABLE_PERSISTENT_HOVERING", true);
+        driver = new InternetExplorerDriver(caps);*/
+        /*System.setProperty("webdriver.gecko.driver",System.getProperty("user.dir")+"\\src\\test\\resources\\Driver\\geckodriver.exe");
         driver = new FirefoxDriver();*/
 
          Log.info("Driver Initialized");
         Log.info("******Excecution  started for the scenario*****"+ scenario.getName());
+        wait = new WebDriverWait(driver,20);
        }
 
      
-    @After(order = 1)
+    //@After(order = 1)
+    @After("@PruFlexiGenerateBI")
     public void embedScreenshot(Scenario scenario) {
 
         if (scenario.isFailed()) {
@@ -143,10 +154,10 @@ public class Hooks{
 
 */
 
-            String screenshotName = scenario.getName().replaceAll(" ", "_");
+            //String screenshotName = scenario.getName().replaceAll(" ", "_");
             try {
                 //This takes a screenshot from the driver at save it to the specified location
-                File sourcePath = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+               /* File sourcePath = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
                 //Building up the destination path for the screenshot to save
                 //Also make sure to create a folder 'screenshots' with in the cucumber-report folder
@@ -157,18 +168,38 @@ public class Hooks{
                 FileUtils.copyFile(sourcePath, destinationPath);
 
                 //This attach the specified screenshot to the test
-                com.cucumber.listener.Reporter.addScreenCaptureFromPath(destinationPath.getAbsolutePath().toString());
+                com.cucumber.listener.Reporter.addScreenCaptureFromPath(destinationPath.getAbsolutePath().toString());*/
+               Reusable_Functions.Take_Screenshot(driver,scenario);
 
                 //test.fail("Details", MediaEntityBuilder.createScreenCaptureFromPath(Paths.get("").toAbsolutePath().toString() + "/screenshotFolder/screenshot.png").build());
                 //driver.quit();
             } catch (IOException e) {
+                System.out.println(e);
             }
-
         }
+
+        /*    CucumberDetailedResults results = new CucumberDetailedResults();
+            results.setOutputDirectory("target/");
+            results.setOutputName("cucumber-results");
+            results.setSourceFile(System.getProperty("user.dir")+"/target/cucumber.json");
+            // Thread.sleep(2000);
+            try {
+                results.execute(true,true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+*/
+
+            driver.quit();
+
+
+
 
         //driver.quit();
     }
-    @After(order = 0)
+   // @After(order = 0)
+    //@After(order = 0)
+    //@After(order = 0)
     public void AfterSteps() throws InterruptedException {
 
         CucumberDetailedResults results = new CucumberDetailedResults();

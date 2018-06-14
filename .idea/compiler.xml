@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="cucumber-java-template" />
+        <module name="OnlinePOE" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="cucumber-java-template" target="1.5" />
+      <module name="OnlinePOE" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

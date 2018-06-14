@@ -2,11 +2,17 @@ package pageobjects;
 //import helpers.Log;
 
 import helpers.Log;
+import org.apache.http.protocol.RequestUserAgent;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.How;
+import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import step_definitions.Hooks;
 import step_definitions.Reusable_Functions;
 
@@ -15,7 +21,17 @@ import java.io.IOException;
 //public class LifeAssured extends BaseClass{
 
 public class BenefitSummary {
-WebDriver driver = Hooks.driver;
+    public WebDriver driver;
+    public WebDriverWait wait;
+
+
+    public BenefitSummary()
+    {
+        driver = Hooks.driver;
+        wait = Hooks.wait;
+        PageFactory.initElements(driver,this);
+
+    }
 
 @FindBy(how=How.ID, using="BenefitSummary_LifeAssured_MainLifeName")
 public static WebElement Lbl_BenefitSummary_LifeAssured_MainLifeName;
@@ -142,6 +158,49 @@ public static WebElement Lbl_BenefitSummary_LifeAssured_MainLifeName;
 
     public static void PruFlexiCash_GenerateQuotation() {
         Btn_BenefitSummary_GenerateQuotation.click();
+
+    }
+
+/*
+    public void ValidateMinMaxSACrisisCoverThree() {
+    }
+
+    public void SetSA_CrisisCoverThree(String sa) {
+    }
+
+    public void Validate_CrisisCoverThreeMP(String expectedMP) {
+    }
+*/
+
+
+
+    public void ValidatePlanDetails(String totalPremium) throws InterruptedException {
+        driver.findElement(By.xpath("//div[@name='planDetailsAccordion']")).click();
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'SGD')]")));
+        //Thread.sleep(5000);
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'Total premium')]//following-sibling::span")).getText().contains(totalPremium));
+
+
+    }
+
+    public void ValidatePremiumDetails(String yearlyPremium, String halfYearlyPremium, String quartYearlyPremium, String monthlyPremium, String singlePremium) throws InterruptedException {
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//span[contains(text(),'PREMIUM DETAILS')]")).click();
+       /* Actions performAct = new Actions(driver);
+        performAct.click(driver.findElement(By.xpath("//div[@name='premiumDetailsAccordion']"))).build().perform();*/
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[contains(text(),'TOTAL YEARLY PREMIUM')]//parent::div/span")));
+        //Thread.sleep(5000);
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'TOTAL YEARLY PREMIUM')]//parent::div/span")).getText().contains(yearlyPremium));
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'TOTAL HALF-YEARLY PREMIUM')]//parent::div/span")).getText().contains(halfYearlyPremium));
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'TOTAL QUARTERLY PREMIUM')]//parent::div/span")).getText().contains(quartYearlyPremium));
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'TOTAL MONTHLY PREMIUM')]//parent::div/span")).getText().contains(monthlyPremium));
+        Assert.assertTrue(driver.findElement(By.xpath("//span[contains(text(),'TOTAL SINGLE PREMIUM')]//parent::div/span")).getText().contains(singlePremium));
+
+    }
+
+    public void GenerateQuotation() throws InterruptedException {
+        driver.findElement(By.xpath("//input[@value='GENERATE QUOTATION']")).click();
+        Thread.sleep(7000);
 
     }
 }
